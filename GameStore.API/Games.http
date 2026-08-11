@@ -1,0 +1,30 @@
+GET http://localhost:5210/games
+
+###
+GET http://localhost:5210/games/1
+
+###
+POST http://localhost:5210/games
+Content-Type: application/json
+
+{
+    "name": "Firewatch",
+    "genre": "Adventure",
+    "price": 17.99,
+    "releaseDate": "2016-02-09"
+
+}
+
+###
+PUT http://localhost:5210/games/1
+Content-Type: application/json
+
+{
+    "name": "Elden Ring Nightrein",
+    "genre": "Action RPG (ARPG)",
+    "price": 79.99,
+    "releaseDate": "2025-05-30"
+}
+
+###
+DELETE http://localhost:5210/games/1
