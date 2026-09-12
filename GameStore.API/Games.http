@@ -8,9 +8,9 @@ POST http://localhost:5210/games
 Content-Type: application/json
 
 {
-    "name": "Firewatch",
-    "genre": "Adventure",
-    "price": 17.99,
+    "name": "Dark Souls III",
+    "genreId": 2,
+    "price": 37.99,
     "releaseDate": "2016-02-09"
 }
 
@@ -19,7 +19,7 @@ PUT http://localhost:5210/games/1
 Content-Type: application/json
 
 {
-    "name": "Elden Ring Nightrein",
+    "name": "Elden Ring Nightreign",
     "genre": "Action RPG (ARPG)",
     "price": 79.99,
     "releaseDate": "2025-05-30"
