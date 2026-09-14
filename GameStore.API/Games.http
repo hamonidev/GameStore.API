@@ -8,10 +8,10 @@ POST http://localhost:5210/games
 Content-Type: application/json
 
 {
-    "name": "Dark Souls III",
+    "name": "Dark Souls II",
     "genreId": 2,
-    "price": 37.99,
-    "releaseDate": "2016-02-09"
+    "price": 27.99,
+    "releaseDate": "2014-03-11"
 }
 
 ###
@@ -19,10 +19,10 @@ PUT http://localhost:5210/games/1
 Content-Type: application/json
 
 {
-    "name": "Elden Ring Nightreign",
-    "genre": "Action RPG (ARPG)",
-    "price": 79.99,
-    "releaseDate": "2025-05-30"
+    "name": "Dark Souls I",
+    "genreId": 2,
+    "price": 19.99,
+    "releaseDate": "2011-09-22"
 }
 
 ###
