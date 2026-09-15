@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
     "name": "Dark Souls II",
-    "genreId": 2,
+    "genreId": 1,
     "price": 27.99,
     "releaseDate": "2014-03-11"
 }
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
     "name": "Dark Souls I",
-    "genreId": 2,
+    "genreId": 1,
     "price": 19.99,
     "releaseDate": "2011-09-22"
 }

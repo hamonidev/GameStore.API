@@ -69,17 +69,17 @@ public static class GamesEndpoints
         // PUT /games/{id}
         group.MapPut("/{id}", async (int id, UpdateGameDto updatedGame, GameStoreContext dbContext) =>
         {
-            var exsitingGame = await dbContext.Games.FindAsync(id);
+            var existingGame = await dbContext.Games.FindAsync(id);
 
-            if (exsitingGame is null)
+            if (existingGame is null)
             {
                 return Results.NotFound();
             }
 
-            exsitingGame.Name = updatedGame.Name;
-            exsitingGame.GenreId = updatedGame.GenreId;
-            exsitingGame.Price = updatedGame.Price;
-            exsitingGame.ReleaseDate = updatedGame.ReleaseDate;
+            existingGame.Name = updatedGame.Name;
+            existingGame.GenreId = updatedGame.GenreId;
+            existingGame.Price = updatedGame.Price;
+            existingGame.ReleaseDate = updatedGame.ReleaseDate;
 
             await dbContext.SaveChangesAsync();
 
@@ -89,9 +89,14 @@ public static class GamesEndpoints
         // DELETE /games/{id}
         group.MapDelete("/{id}", async (int id, GameStoreContext dbContext) =>
         {
-            await dbContext.Games
-                            .Where(game => game.Id == id)
-                            .ExecuteDeleteAsync();
+            var deletedCount = await dbContext.Games
+                .Where(game => game.Id == id)
+                .ExecuteDeleteAsync();
+
+            if (deletedCount == 0)
+            {
+                return Results.NotFound($"Game with ID {id} was not found.");
+            }
 
             return Results.NoContent();
         });
