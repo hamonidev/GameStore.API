@@ -44,6 +44,11 @@ public static class GamesEndpoints
         // POST /games
         group.MapPost("/", async (CreateGameDto newGame, GameStoreContext dbContext) =>
         {
+            bool genreExists = await dbContext.Genres.AnyAsync(genre => genre.Id == newGame.GenreId);
+
+            if (!genreExists)
+                return Results.BadRequest($"The Genre ID {newGame.GenreId} does not exist.");
+
             Game game = new()
             {
                 Name = newGame.Name,
