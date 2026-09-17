@@ -13,18 +13,27 @@ public static class GamesEndpoints
     {
         var group = app.MapGroup("/games");
 
-        // GET /games
-        group.MapGet("/", async (GameStoreContext dbContext)
-            => await dbContext.Games
-                .Include(game => game.Genre)
+        // GET /games & /games?genreId={id}
+        group.MapGet("/", async (int? genreId, GameStoreContext dbContext) =>
+        {
+            IQueryable<Game> query = dbContext.Games;
+
+            if (genreId.HasValue)
+            {
+                query = query
+                .Where(game => game.GenreId == genreId.Value);
+            }
+
+            return await query
                 .Select(game => new GameSummaryDto(
-                    game.Id,
-                    game.Name,
-                    game.Genre!.Name,
-                    game.Price,
-                    game.ReleaseDate))
-                    .AsNoTracking()
-                    .ToListAsync());
+                  game.Id,
+                  game.Name,
+                  game.Genre!.Name,
+                  game.Price,
+                  game.ReleaseDate))
+                  .AsNoTracking()
+                  .ToListAsync();
+        });
 
         // GET /games/{id}
         group.MapGet("/{id}", async (int id, GameStoreContext dbContext) =>

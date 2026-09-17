@@ -1,6 +1,9 @@
 GET http://localhost:5210/games
 
 ###
+GET http://localhost:5210/games?genreId=2
+
+###
 GET http://localhost:5210/games/1
 
 ###
@@ -26,7 +29,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5210/games/1
+DELETE http://localhost:5210/games/4
 
 ###
 GET http://localhost:5210/genres
