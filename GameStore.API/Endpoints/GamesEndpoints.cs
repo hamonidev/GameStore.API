@@ -14,14 +14,18 @@ public static class GamesEndpoints
         var group = app.MapGroup("/games");
 
         // GET /games & /games?genreId={id}
-        group.MapGet("/", async (int? genreId, GameStoreContext dbContext) =>
+        group.MapGet("/", async (int? genreId, string? search, GameStoreContext dbContext) =>
         {
             IQueryable<Game> query = dbContext.Games;
 
             if (genreId.HasValue)
             {
-                query = query
-                .Where(game => game.GenreId == genreId.Value);
+                query = query.Where(game => game.GenreId == genreId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(game => game.Name.Contains(search));
             }
 
             return await query

@@ -4,6 +4,12 @@ GET http://localhost:5210/games
 GET http://localhost:5210/games?genreId=2
 
 ###
+GET http://localhost:5210/games?search=Elden
+
+###
+GET http://localhost:5210/games?genreId=2&search=Elden
+
+###
 GET http://localhost:5210/games/1
 
 ###
@@ -11,10 +17,10 @@ POST http://localhost:5210/games
 Content-Type: application/json
 
 {
-    "name": "Dark Souls II",
-    "genreId": 1,
+    "name": "Elden Ring Nightreign",
+    "genreId": 2,
     "price": 27.99,
-    "releaseDate": "2014-03-11"
+    "releaseDate": "2024-03-11"
 }
 
 ###
@@ -29,7 +35,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5210/games/4
+DELETE http://localhost:5210/games/5
 
 ###
 GET http://localhost:5210/genres
