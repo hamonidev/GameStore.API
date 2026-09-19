@@ -17,7 +17,8 @@ public static class GamesEndpoints
         // GET /games?genreId={id}
         // GET /games?search={gameName}
         // GET /games?page=1&pageSize=10
-        group.MapGet("/", async (int? genreId, string? search, GameStoreContext dbContext, int page = 1, int pageSize = 10) =>
+        // GET /games?sort={sort}
+        group.MapGet("/", async (int? genreId, string? search, string? sort, GameStoreContext dbContext, int page = 1, int pageSize = 10) =>
         {
             IQueryable<Game> query = dbContext.Games;
 
@@ -31,12 +32,20 @@ public static class GamesEndpoints
                 query = query.Where(game => game.Name.Contains(search));
             }
 
+            query = sort?.ToLowerInvariant() switch
+            {
+                "name" => query.OrderBy(game => game.Name),
+                "price" => query.OrderBy(game => game.Price),
+                "price_desc" => query.OrderByDescending(game => game.Price),
+                "releasedate" => query.OrderBy(game => game.ReleaseDate),
+                _ => query.OrderBy(game => game.Id)
+            };
+
             page = Math.Clamp(page, 1, 50);
             pageSize = Math.Clamp(pageSize, 1, 30);
 
             var skipCount = (page - 1) * pageSize;
 
-            query = query.OrderBy(game => game.Id);
             query = query.Skip(skipCount);
             query = query.Take(pageSize);
 
