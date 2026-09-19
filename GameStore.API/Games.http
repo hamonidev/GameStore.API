@@ -10,6 +10,9 @@ GET http://localhost:5210/games?search=Elden
 GET http://localhost:5210/games?genreId=2&search=Elden
 
 ###
+GET http://localhost:5210/games?page=1&pageSize=10
+
+###
 GET http://localhost:5210/games/1
 
 ###
@@ -17,7 +20,7 @@ POST http://localhost:5210/games
 Content-Type: application/json
 
 {
-    "name": "Elden Ring Nightreign",
+    "name": "Game 15",
     "genreId": 2,
     "price": 27.99,
     "releaseDate": "2024-03-11"

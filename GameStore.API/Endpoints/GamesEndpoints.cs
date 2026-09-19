@@ -13,8 +13,11 @@ public static class GamesEndpoints
     {
         var group = app.MapGroup("/games");
 
-        // GET /games & /games?genreId={id}
-        group.MapGet("/", async (int? genreId, string? search, GameStoreContext dbContext) =>
+        // GET /games
+        // GET /games?genreId={id}
+        // GET /games?search={gameName}
+        // GET /games?page=1&pageSize=10
+        group.MapGet("/", async (int? genreId, string? search, GameStoreContext dbContext, int page = 1, int pageSize = 10) =>
         {
             IQueryable<Game> query = dbContext.Games;
 
@@ -27,6 +30,15 @@ public static class GamesEndpoints
             {
                 query = query.Where(game => game.Name.Contains(search));
             }
+
+            page = Math.Clamp(page, 1, 50);
+            pageSize = Math.Clamp(pageSize, 1, 30);
+
+            var skipCount = (page - 1) * pageSize;
+
+            query = query.OrderBy(game => game.Id);
+            query = query.Skip(skipCount);
+            query = query.Take(pageSize);
 
             return await query
                 .Select(game => new GameSummaryDto(
