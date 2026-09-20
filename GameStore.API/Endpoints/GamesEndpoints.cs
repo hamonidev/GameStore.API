@@ -111,9 +111,12 @@ public static class GamesEndpoints
             var existingGame = await dbContext.Games.FindAsync(id);
 
             if (existingGame is null)
-            {
                 return Results.NotFound();
-            }
+
+            var genreExists = await dbContext.Genres.AnyAsync(genre => genre.Id == updatedGame.GenreId);
+
+            if (!genreExists)
+                return Results.BadRequest($"The Genre ID {updatedGame.GenreId} does not exist.");
 
             existingGame.Name = updatedGame.Name;
             existingGame.GenreId = updatedGame.GenreId;
