@@ -1,6 +1,9 @@
 GET http://localhost:5210/games
 
 ###
+GET http://localhost:5210/games/1
+
+###
 GET http://localhost:5210/games?genreId=2
 
 ###
@@ -25,9 +28,6 @@ GET http://localhost:5210/games?sort=name
 GET http://localhost:5210/games?sort=releasedate
 
 ###
-GET http://localhost:5210/games/1
-
-###
 POST http://localhost:5210/games
 Content-Type: application/json
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 
 {
     "name": "Dark Souls I",
-    "genreId": 1,
+    "genreId": 49,
     "price": 19.99,
     "releaseDate": "2011-09-22"
 }

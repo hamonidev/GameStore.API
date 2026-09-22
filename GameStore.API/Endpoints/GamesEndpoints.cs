@@ -65,7 +65,11 @@ public static class GamesEndpoints
         {
             var game = await dbContext.Games.FindAsync(id);
 
-            return game is null ? Results.NotFound() : Results.Ok(new GameDetailsDto(
+            return game is null ? Results.Problem(
+                detail: $"Game with ID {id} was not found.",
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Game Not Found"
+            ) : Results.Ok(new GameDetailsDto(
                 game.Id,
                 game.Name,
                 game.GenreId,
@@ -81,7 +85,11 @@ public static class GamesEndpoints
             bool genreExists = await dbContext.Genres.AnyAsync(genre => genre.Id == newGame.GenreId);
 
             if (!genreExists)
-                return Results.BadRequest($"The Genre ID {newGame.GenreId} does not exist.");
+                return Results.Problem(
+                    detail: $"Genre ID {newGame.GenreId} does not exist.",
+                    statusCode: StatusCodes.Status400BadRequest,
+                    title: "Invalid Genre"
+                );
 
             Game game = new()
             {
@@ -111,12 +119,21 @@ public static class GamesEndpoints
             var existingGame = await dbContext.Games.FindAsync(id);
 
             if (existingGame is null)
-                return Results.NotFound();
+                return Results.Problem(
+                    detail: $"Game with ID {id} was not found.",
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Game Not Found"
+                );
 
             var genreExists = await dbContext.Genres.AnyAsync(genre => genre.Id == updatedGame.GenreId);
 
             if (!genreExists)
-                return Results.BadRequest($"The Genre ID {updatedGame.GenreId} does not exist.");
+                return Results.Problem(
+                detail: $"Genre ID {updatedGame.GenreId} does not exist.",
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Invalid Genre"
+                );
+
 
             existingGame.Name = updatedGame.Name;
             existingGame.GenreId = updatedGame.GenreId;
@@ -137,8 +154,13 @@ public static class GamesEndpoints
 
             if (deletedCount == 0)
             {
-                return Results.NotFound($"Game with ID {id} was not found.");
+                return Results.Problem(
+                detail: $"Game with ID {id} was not found.",
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Game Not Found"
+                );
             }
+
 
             return Results.NoContent();
         });
