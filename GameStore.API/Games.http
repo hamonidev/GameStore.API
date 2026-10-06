@@ -39,12 +39,12 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5210/games/1
+PUT http://localhost:5210/games/2
 Content-Type: application/json
 
 {
-    "name": "Dark Souls I",
-    "genreId": 49,
+    "name": "Game 1",
+    "genreId": 2,
     "price": 19.99,
     "releaseDate": "2011-09-22"
 }

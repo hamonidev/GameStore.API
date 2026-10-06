@@ -91,6 +91,15 @@ public static class GamesEndpoints
                     title: "Invalid Genre"
                 );
 
+            bool gameExists = await dbContext.Games.AnyAsync(game => game.Name == newGame.Name);
+
+            if (gameExists)
+                return Results.Problem(
+                    detail: $"Game with name '{newGame.Name}' already exists.",
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Duplicate Game"
+                );
+
             Game game = new()
             {
                 Name = newGame.Name,
@@ -132,6 +141,15 @@ public static class GamesEndpoints
                 detail: $"Genre ID {updatedGame.GenreId} does not exist.",
                 statusCode: StatusCodes.Status400BadRequest,
                 title: "Invalid Genre"
+                );
+
+            bool gameExists = await dbContext.Games.AnyAsync(game => game.Name == updatedGame.Name && game.Id != id);
+
+            if (gameExists)
+                return Results.Problem(
+                    detail: $"Game with name '{updatedGame.Name}' already exists.",
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Duplicate Game"
                 );
 
 
