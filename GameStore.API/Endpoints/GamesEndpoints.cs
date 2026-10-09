@@ -1,6 +1,7 @@
 using GameStore.API.Data;
 using GameStore.API.DTOs;
 using GameStore.API.Models;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.API.Endpoints;
@@ -109,7 +110,21 @@ public static class GamesEndpoints
             };
 
             dbContext.Games.Add(game);
-            await dbContext.SaveChangesAsync();
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqliteException sqliteEx
+                && sqliteEx.SqliteErrorCode == 19
+                && sqliteEx.SqliteExtendedErrorCode == 2067)
+            {
+                return Results.Problem(
+                    detail: $"Game with name '{newGame.Name}' already exists.",
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Duplicate Game"
+                );
+            }
 
             GameDetailsDto gameDto = new(
                 game.Id,
@@ -158,7 +173,20 @@ public static class GamesEndpoints
             existingGame.Price = updatedGame.Price;
             existingGame.ReleaseDate = updatedGame.ReleaseDate;
 
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqliteException sqliteEx
+                && sqliteEx.SqliteErrorCode == 19
+                && sqliteEx.SqliteExtendedErrorCode == 2067)
+            {
+                return Results.Problem(
+                    detail: $"Game with name '{updatedGame.Name}' already exists.",
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Duplicate Game"
+                );
+            }
 
             return Results.NoContent();
         });
@@ -178,7 +206,6 @@ public static class GamesEndpoints
                 title: "Game Not Found"
                 );
             }
-
 
             return Results.NoContent();
         });
