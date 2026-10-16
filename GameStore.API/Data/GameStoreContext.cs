@@ -16,7 +16,11 @@ public class GameStoreContext(DbContextOptions<GameStoreContext> options)
 
         modelBuilder.Entity<Game>(entity =>
         {
-            entity.HasIndex(game => game.Name).IsUnique();
+            entity.Property(game => game.Name)
+                .UseCollation("NOCASE");
+
+            entity.HasIndex(game => game.Name)
+                .IsUnique();
         });
     }
 }
