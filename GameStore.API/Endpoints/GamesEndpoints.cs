@@ -30,7 +30,16 @@ public static class GamesEndpoints
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(game => game.Name.Contains(search));
+                var escapedSearch = search
+                    .Replace("!", "!!")
+                    .Replace("%", "!%")
+                    .Replace("_", "!_");
+
+                query = query.Where(game =>
+                    EF.Functions.Like(
+                        game.Name,
+                        $"%{escapedSearch}%",
+                        "!"));
             }
 
             query = sort?.ToLowerInvariant() switch
