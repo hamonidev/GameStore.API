@@ -13,7 +13,7 @@ GET http://localhost:5210/games?search=Elden
 GET http://localhost:5210/games?genreId=2&search=Elden
 
 ###
-GET http://localhost:5210/games?page=1&pageSize=10
+GET http://localhost:5210/games?page=0&pageSize=10
 
 ###
 GET http://localhost:5210/games?sort=price
