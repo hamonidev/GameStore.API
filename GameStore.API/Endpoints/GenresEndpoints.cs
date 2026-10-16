@@ -17,5 +17,20 @@ public static class GenresEndpoints
                             .AsNoTracking()
                             .ToListAsync()
          );
+
+        // GET /genres{id}
+        group.MapGet("/{id}", async (int id, GameStoreContext dbContext) =>
+        {
+            var genre = await dbContext.Genres.FindAsync(id);
+
+            return genre is null ? Results.Problem(
+                detail: $"Genre with ID {id} was not found.",
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Genre Not Found"
+            ) : Results.Ok(new GenreDto(
+                genre.Id,
+                genre.Name
+            ));
+        });
     }
 }
