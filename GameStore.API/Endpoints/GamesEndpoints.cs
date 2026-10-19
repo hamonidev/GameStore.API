@@ -44,10 +44,19 @@ public static class GamesEndpoints
 
             query = sort?.ToLowerInvariant() switch
             {
-                "name" => query.OrderBy(game => game.Name),
-                "price" => query.OrderBy(game => game.Price),
-                "price_desc" => query.OrderByDescending(game => game.Price),
-                "releasedate" => query.OrderBy(game => game.ReleaseDate),
+                "name" => query
+                    .OrderBy(game => game.Name)
+                    .ThenBy(game => game.Id),
+                "price" => query
+                    .OrderBy(game => game.Price)
+                    .ThenBy(game => game.Id),
+                "price_desc" => query
+                    .OrderByDescending(game => game.Price)
+                    .ThenBy(game => game.Id),
+                "releasedate" => query
+                    .OrderBy(game => game.ReleaseDate)
+                    .ThenBy(game => game.Id),
+
                 _ => query.OrderBy(game => game.Id)
             };
 
