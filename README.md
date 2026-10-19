@@ -86,7 +86,7 @@ The GET /games endpoint supports the following query parameters:
 | `search` | Search game names
 | `sort` | Sort by name, price, price_desc, or releaseDate
 | `page` | Select the page number |
-| `pageSize | Choose the number of results per page |
+| `pageSize` | Choose the number of results per page |
 
 # Example:
 
