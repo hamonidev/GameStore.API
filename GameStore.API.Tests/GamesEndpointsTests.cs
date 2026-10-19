@@ -1,11 +1,63 @@
 using System.Net;
 using System.Net.Http.Json;
 using GameStore.API.DTOs;
+using GameStore.API.Models;
 
 namespace GameStore.API.Tests;
 
 public class GamesEndpointsTests
 {
+    [Fact]
+    public async Task CreateGame_WithEmptyName_ReturnsBadRequest()
+    {
+        using var factory = new GameStoreApiFactory();
+        using var client = factory.CreateClient();
+
+        var newGame = new CreateGameDto(
+            "",
+            1,
+            59.99m,
+            new DateOnly(2025, 1, 1));
+
+        var response = await client.PostAsJsonAsync("/games", newGame);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGame_WithNameExceedingMaxLength_ReturnsBadRequest()
+    {
+        using var factory = new GameStoreApiFactory();
+        using var client = factory.CreateClient();
+
+        var newGame = new CreateGameDto(
+            "A".PadRight(51, 'A'),
+            1,
+            59.99m,
+            new DateOnly(2025, 1, 1));
+
+        var response = await client.PostAsJsonAsync("/games", newGame);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGame_WithInvalidPrice_ReturnsBadRequest()
+    {
+        using var factory = new GameStoreApiFactory();
+        using var client = factory.CreateClient();
+
+        var newGame = new CreateGameDto(
+            "Game Name",
+            1,
+            559.99m,
+            new DateOnly(2025, 1, 1));
+
+        var response = await client.PostAsJsonAsync("/games", newGame);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     [Fact]
     public async Task CreateGame_ValidGame_ReturnsCreated()
     {
@@ -111,7 +163,7 @@ public class GamesEndpointsTests
         var locationHeader = postResponse.Headers.Location;
         Assert.NotNull(locationHeader);
 
-        var createdGame = await postResponse.Content.ReadFromJsonAsync<GameSummaryDto>();
+        var createdGame = await postResponse.Content.ReadFromJsonAsync<GameDetailsDto>();
         Assert.NotNull(createdGame);
 
         Assert.EndsWith($"/games/{createdGame.Id}", locationHeader.ToString());
