@@ -13,13 +13,17 @@ A REST API built with ASP.NET Core and Entity Framework Core for managing a coll
 - Validate incoming requests and genre references
 - Prevent duplicate game names with case-insensitive uniqueness checks
 - Integration tests for API endpoints and database interactions
+- Interactive API documentation with Swagger UI
 
 ## Technologies
 
 - C#
+- .NET 10
 - ASP.NET Core Minimal APIs
 - Entity Framework Core
 - SQLite
+- OpenAPI
+- SwaggerUI
 - xUnit
 - Microsoft.AspNetCore.Mvc.Testing
 - Microsoft.NET.Test.Sdk
@@ -29,7 +33,6 @@ A REST API built with ASP.NET Core and Entity Framework Core for managing a coll
 ### Prerequisites
 
 - .NET 10 SDK
-- Visual Studio, Visual Studio Code, or another C# editor
 
 ### Run the API
 
@@ -47,17 +50,19 @@ dotnet run --project GameStore.API/GameStore.API.csproj
 ```
 The application uses SQLite for storage. When you run the API in development, database migrations are applied automatically and the default genres are seeded if none exist.
 
-Once the application is running, the console output will show the URL where the API is available.
+The console output will show the URL where the API is running.
 
-## Running the Tests
+## API Documentation
 
-Run all tests from the repository root:
+When running in the Development environment, the interactive API documentation is available through Swagger UI.
+
+Replace the port with the one shown in your console and open this URL:
 
 ```bash
-dotnet test
+http://localhost:<port>/swagger
 ```
 
-The integration tests use a separate SQLite database to keep test data isolated from the development environment.
+You will be able to explore all the available endpoints and send requests to the API.
 
 ## API Endpoints
 
@@ -71,6 +76,33 @@ The integration tests use a separate SQLite database to keep test data isolated 
 | GET | `/genres` | Get all genres |
 | GET | `/genres/{id}` | Get a genre by ID |
 
+## Game Listing Parameters
+
+The GET /games endpoint supports the following query parameters:
+
+| Parameter |  Description |
+|---|---|
+| `genreId` | Filter games by genre ID |
+| `search` | Search game names
+| `sort` | Sort by name, price, price_desc, or releaseDate
+| `page` | Select the page number |
+| `pageSize | Choose the number of results per page |
+
+# Example:
+
+```bash
+GET /games?search=wukong&sort=price&page=1&pageSize=10
+```
+
+## Running the Tests
+
+Run all tests from the repository root:
+
+```bash
+dotnet test
+```
+
+The integration tests use a separate SQLite database to keep test data isolated from the development environment.
 
 ## About This Project
 
